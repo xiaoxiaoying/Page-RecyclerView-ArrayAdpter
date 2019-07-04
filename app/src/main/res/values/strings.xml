@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">RecyclerArrayAdapter</string>
+    <string name="simple">简单列表</string>
+    <string name="simple_parent">指定条目通栏列表</string>
+    <string name="simple_view_pager">翻页列表</string>
+</resources>
