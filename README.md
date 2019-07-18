@@ -32,3 +32,10 @@
 
 
 * 在 `GridLayoutManager` 模式下指定条目通栏
+
+
+#### 使用
+
+```
+implementation 'com.xiaoxiaoying91:recyclerarrayadapter:1.0'
+```
