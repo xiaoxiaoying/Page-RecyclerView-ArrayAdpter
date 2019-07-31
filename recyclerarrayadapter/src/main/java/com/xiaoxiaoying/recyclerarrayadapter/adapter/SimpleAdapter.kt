@@ -14,7 +14,7 @@ import java.lang.NullPointerException
  */
 abstract class SimpleAdapter<T>(
     context: Context,
-    @LayoutRes resource: Int
+    @LayoutRes resource: Int = 0
 ) : ArrayAdapter<T, ViewHolder>(context, resource) {
 
     override fun getViewHolder(itemView: View?, parent: ViewGroup?, viewType: Int): ViewHolder {

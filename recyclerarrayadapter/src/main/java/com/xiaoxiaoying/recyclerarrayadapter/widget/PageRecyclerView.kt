@@ -106,8 +106,6 @@ class PageRecyclerView(context: Context, attrs: AttributeSet?, defStyle: Int = 0
 
             is StaggeredGridLayoutManager -> layout.gapStrategy =
                 StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
-
-
         }
 
 

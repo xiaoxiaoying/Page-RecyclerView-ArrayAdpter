@@ -155,25 +155,19 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): H {
 
-        return getViewHolder(if (resource == 0) null else getView(resource, p0), p0, p1)
+        return getViewHolder(
+            if (resource == 0)
+                if (getItemResourceId(p1) == 0) null else getView(getItemResourceId(p1), p0)
+            else getView(resource, p0), p0, p1
+        )
     }
 
     override fun onBindViewHolder(holder: H, p1: Int) {
         val itemType = getItemViewType(position = p1)
-        if (itemType == TYPE_NORMAL)
-            content(holder, p1)
-        else onTypeBindView(holder, p1)
-    }
 
-
-    override fun getItemViewType(position: Int): Int =
-        TYPE_NORMAL
-
-
-    private fun content(holder: H, p1: Int) {
         val item = getItem(p1)
         holder.itemView.setTag(R.id.itemClickTag, item)
-        onBindView(holder, p1, item)
+
         holder.itemView.setOnClickListener {
             val tag = it.getTag(R.id.itemClickTag) ?: return@setOnClickListener
             val itemT = tag as T
@@ -188,13 +182,18 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
             true
         }
 
+        onBindView(holder, p1, itemType, item)
     }
+
+
+    override fun getItemViewType(position: Int): Int =
+        TYPE_NORMAL
+
 
     abstract fun getViewHolder(itemView: View?, parent: ViewGroup?, viewType: Int): H
 
-    abstract fun onBindView(h: H, position: Int, t: T?)
+    abstract fun onBindView(h: H, position: Int, viewType: Int, t: T?)
 
-    open fun onTypeBindView(holder: H, position: Int) {}
-
+    open fun getItemResourceId(position: Int) = 0
 
 }

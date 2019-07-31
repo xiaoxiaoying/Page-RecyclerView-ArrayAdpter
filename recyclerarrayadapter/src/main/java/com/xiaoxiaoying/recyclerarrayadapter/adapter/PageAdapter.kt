@@ -17,7 +17,7 @@ import java.lang.NullPointerException
  */
 abstract class PageAdapter<T>(
     context: Context,
-    @LayoutRes resource: Int
+    @LayoutRes resource: Int = 0
 ) : ArrayAdapter<T, PageAdapter.ViewHolder>(context, resource) {
 
     companion object {

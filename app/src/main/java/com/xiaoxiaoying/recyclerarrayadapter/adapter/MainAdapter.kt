@@ -13,7 +13,7 @@ class MainAdapter(context: Context, private val isPager: Boolean) : SimpleAdapte
 
     constructor(context: Context) : this(context, false)
 
-    override fun onBindView(h: ViewHolder, position: Int, t: String?) {
+    override fun onBindView(h: ViewHolder, position: Int, viewType: Int, t: String?) {
         if (t.isNullOrEmpty()) return
 
         h.itemView.layoutParams = ViewGroup.LayoutParams(
