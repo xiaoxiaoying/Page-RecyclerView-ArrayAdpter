@@ -1,6 +1,7 @@
 package com.xiaoxiaoying.recyclerarrayadapter.adapter
 
 import android.content.Context
+import android.widget.TextView
 import com.xiaoxiaoying.recyclerarrayadapter.R
 import kotlinx.android.synthetic.main.item_main.view.*
 
@@ -14,6 +15,10 @@ class DetailsAdapter(context: Context) : PageAdapter<String>(context) {
 
     override fun onBindView(h: ViewHolder, position: Int, viewType: Int, t: String?) {
         if (t.isNullOrEmpty()) return
-        h.itemView.apply { txt.text = t }
+        if (h.itemView !is TextView)
+            return
+
+        val txt = h.itemView as TextView
+        txt.text = t
     }
 }

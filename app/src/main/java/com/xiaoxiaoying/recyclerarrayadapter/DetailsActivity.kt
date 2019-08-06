@@ -54,7 +54,7 @@ class DetailsActivity : AppCompatActivity(), OnLoadNextListener {
                 text.gravity = Gravity.CENTER
                 text.text = "THIS IS HEAD VIEW"
                 (adapter as DetailsAdapter).addHeadView(text)
-                (adapter as DetailsAdapter).removeFootView()
+//                (adapter as DetailsAdapter).removeFootView()
                 setData(true)
             }
 
@@ -81,6 +81,9 @@ class DetailsActivity : AppCompatActivity(), OnLoadNextListener {
     }
 
     private fun setData(isParent: Boolean) {
+
+
+
         ((page - 1) * 60 until page * 60).forEach {
             adapter?.add(it.toString())
         }
