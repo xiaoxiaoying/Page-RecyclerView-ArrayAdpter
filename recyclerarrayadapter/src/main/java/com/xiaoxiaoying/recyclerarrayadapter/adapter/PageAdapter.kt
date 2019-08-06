@@ -17,8 +17,8 @@ import java.lang.NullPointerException
  */
 abstract class PageAdapter<T>(
     context: Context,
-    @LayoutRes resource: Int = 0
-) : ArrayAdapter<T, PageAdapter.ViewHolder>(context, resource) {
+    @LayoutRes private val resource: Int = 0
+) : ArrayAdapter<T, PageAdapter.ViewHolder>(context) {
 
     companion object {
         private const val TYPE_HEADER = 1//头部--支持头部增加一个headerView
@@ -110,6 +110,7 @@ abstract class PageAdapter<T>(
         }
     }
 
+
     /**
      * 不要重写这个方法
      * 不然会错乱
@@ -144,7 +145,6 @@ abstract class PageAdapter<T>(
 
     open fun getItemType(position: Int): Int =
         TYPE_NORMAL
-
 
     open class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
