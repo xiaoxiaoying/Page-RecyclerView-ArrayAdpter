@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
-        versionCode 3
-        versionName "1.1.1"
+        versionCode 5
+        versionName "1.2.0"
 
     }
     compileOptions {
@@ -43,7 +43,7 @@ publish {
 
     def groupProjectID = 'com.xiaoxiaoying91'
     def artifactProjectID = 'recyclerarrayadapter'
-    def publishVersionID = '1.1.1'
+    def publishVersionID = '1.2.0'
 
     userOrg = 'xiaoxiaoying91'
     repoName = 'RecyclerArrayAdapter'

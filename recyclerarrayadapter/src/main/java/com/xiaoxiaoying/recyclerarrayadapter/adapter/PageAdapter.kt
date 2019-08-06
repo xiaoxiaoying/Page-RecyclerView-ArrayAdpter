@@ -75,10 +75,16 @@ abstract class PageAdapter<T>(
     fun getState(): LoadingFooter.State = mFooterView.getState()
 
     fun getLoadingFooter(): LoadingFooter = mFooterView
+    override fun getItem(position: Int): T? {
+        return when (getItemViewType(position)) {
+            TYPE_HEADER, TYPE_FOOTER -> null
 
+            else -> super.getItem(if (hasHeaderView) position - 1 else position)
+        }
+
+    }
 
     override fun getViewHolder(itemView: View?, parent: ViewGroup?, viewType: Int): ViewHolder {
-
         return when (viewType) {
 
             TYPE_HEADER -> HeadView(
@@ -124,11 +130,10 @@ abstract class PageAdapter<T>(
     override fun getItemViewType(position: Int): Int {
         val headerPosition = 0
         val footerPosition = itemCount - 1
+        return when {
+            position == headerPosition && hasHeaderView -> TYPE_HEADER
 
-        return when (position) {
-            headerPosition -> if (hasHeaderView) TYPE_HEADER else getItemType(position)
-
-            footerPosition -> if (hasFooterView) TYPE_FOOTER else getItemType(position)
+            position == footerPosition && hasFooterView -> TYPE_FOOTER
 
             else -> getItemType(position)
         }
@@ -137,9 +142,9 @@ abstract class PageAdapter<T>(
     override fun getCount(): Int {
         var count = super.getCount()
         if (hasFooterView)
-            count++
+            count += 1
         if (hasHeaderView)
-            count++
+            count += 1
         return count
     }
 

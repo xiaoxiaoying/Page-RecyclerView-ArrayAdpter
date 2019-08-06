@@ -145,7 +145,7 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
     fun getView(@LayoutRes mResource: Int, parent: ViewGroup): View =
         inflater!!.inflate(mResource, parent, false)
 
-    fun getItem(position: Int): T? = if (position >= arrays.size) null else arrays[position]
+    open fun getItem(position: Int): T? = if (position >= arrays.size) null else arrays[position]
 
     override fun getItemCount(): Int {
         return arrays.size + getCount()
@@ -162,8 +162,9 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
     }
 
     override fun onBindViewHolder(holder: H, p1: Int) {
-        val itemType = getItemViewType(position = p1)
-
+        val itemType = getItemViewType(p1)
+        if (itemType != TYPE_NORMAL)
+            return
         val item = getItem(p1) ?: return
 
         holder.itemView.setTag(R.id.itemClickTag, item)
@@ -184,10 +185,6 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
         onBindView(holder, p1, itemType, item)
     }
-
-
-    override fun getItemViewType(position: Int): Int =
-        TYPE_NORMAL
 
 
     abstract fun getViewHolder(itemView: View?, parent: ViewGroup?, viewType: Int): H
