@@ -5,13 +5,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.0"
+    buildToolsVersion "29.0.1"
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 29
         versionCode 2
-        versionName "1.1"
+        versionName "1.1.1"
 
     }
     compileOptions {
@@ -43,7 +43,7 @@ publish {
 
     def groupProjectID = 'com.xiaoxiaoying91'
     def artifactProjectID = 'recyclerarrayadapter'
-    def publishVersionID = '1.1'
+    def publishVersionID = '1.1.1'
 
     userOrg = 'xiaoxiaoying91'
     repoName = 'RecyclerArrayAdapter'
