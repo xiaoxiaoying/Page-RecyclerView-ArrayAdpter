@@ -154,7 +154,9 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
     open fun getCount(): Int = 0
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): H {
-
+        val count = arrays.size
+        if (count == 0)
+            return getViewHolder(null, p0, p1)
         return getViewHolder(
             if (resource == 0)
                 if (getItemResourceId(p1) == 0) null else getView(getItemResourceId(p1), p0)
@@ -165,7 +167,8 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
     override fun onBindViewHolder(holder: H, p1: Int) {
         val itemType = getItemViewType(position = p1)
 
-        val item = getItem(p1)
+        val item = getItem(p1) ?: return
+
         holder.itemView.setTag(R.id.itemClickTag, item)
 
         holder.itemView.setOnClickListener {

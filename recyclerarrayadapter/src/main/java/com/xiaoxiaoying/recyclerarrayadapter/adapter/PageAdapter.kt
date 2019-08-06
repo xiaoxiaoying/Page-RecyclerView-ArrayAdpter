@@ -78,7 +78,6 @@ abstract class PageAdapter<T>(
 
 
     override fun getViewHolder(itemView: View?, parent: ViewGroup?, viewType: Int): ViewHolder {
-        if (itemView == null) throw NullPointerException("resource is not fond")
 
         return when (viewType) {
 
@@ -90,7 +89,8 @@ abstract class PageAdapter<T>(
                 val footerView = FooterView(
                     mFooterView.getFooterView()
                 )
-
+                footerView.itemView.layoutParams =
+                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 footerView.itemView.setOnClickListener {
                     if (mFooterView.getState() == LoadingFooter.State.Error)
                         onLoadNextListener?.onLoadNext()
@@ -100,7 +100,13 @@ abstract class PageAdapter<T>(
                 footerView
             }
 
-            else -> ViewHolder(itemView)
+            else -> {
+                if (itemView == null) {
+                    throw NullPointerException("view is null")
+                }
+
+                ViewHolder(itemView)
+            }
         }
     }
 
