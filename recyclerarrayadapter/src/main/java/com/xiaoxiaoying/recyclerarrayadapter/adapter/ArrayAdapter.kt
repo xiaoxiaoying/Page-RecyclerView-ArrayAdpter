@@ -178,7 +178,6 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
         holder.itemView.setOnLongClickListener {
             val tag = it.getTag(R.id.itemClickTag) ?: return@setOnLongClickListener false
             val itemLong = tag as T
-            if (onItemLongClickListener != null) return@setOnLongClickListener false
             onItemLongClickListener?.onItemLongClick(itemLong, it)
             true
         }
