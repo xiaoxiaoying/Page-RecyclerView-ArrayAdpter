@@ -37,5 +37,5 @@
 #### 使用
 
 ```
-implementation 'com.xiaoxiaoying91:recyclerarrayadapter:1.1'
+implementation 'com.xiaoxiaoying91:recyclerarrayadapter:1.1.1'
 ```
