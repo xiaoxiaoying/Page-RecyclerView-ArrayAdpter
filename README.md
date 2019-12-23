@@ -1,7 +1,7 @@
 # RecyclerArrayAdapter
 
 ###### `Java 8.0`
-###### `Kotlin 1.3.40`
+###### `Kotlin 1.3.50`
 ###### `SDk 29`
 ###### `Androidx`
 
@@ -37,5 +37,5 @@
 #### 使用
 
 ```
-implementation 'com.xiaoxiaoying91:recyclerarrayadapter:1.1.1'
+implementation 'com.xiaoxiaoying91:recyclerarrayadapter:1.2.2'
 ```

@@ -163,8 +163,6 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
     override fun onBindViewHolder(holder: H, p1: Int) {
         val itemType = getItemViewType(p1)
-        if (itemType != TYPE_NORMAL)
-            return
         val item = getItem(p1) ?: return
 
         holder.itemView.setTag(R.id.itemClickTag, item)
