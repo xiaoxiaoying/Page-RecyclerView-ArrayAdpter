@@ -50,28 +50,34 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
 
     fun addAll(collection: Collection<T>) {
+        val oldItemCount = if (itemCount == 0)
+            1 else itemCount
         synchronized(mLock) {
             arrays.addAll(collection)
         }
-        notifyDataSetChanged()
+
+        notifyItemRangeChanged(oldItemCount - 1, collection.size)
     }
 
     fun addAll(vararg objects: T) {
+        val oldItemCount = if (itemCount == 0)
+            1 else itemCount
         synchronized(mLock) {
+
             Collections.addAll(arrays, *objects)
         }
-        notifyDataSetChanged()
+        notifyItemRangeChanged(oldItemCount - 1, objects.size)
     }
 
 
     fun insert(t: T, index: Int) {
 
-        if (index >= arrays.size) throw IndexOutOfBoundsException("It's arrays size ${arrays.size}")
+        if (index > arrays.size) throw IndexOutOfBoundsException("It's arrays size ${arrays.size}")
         synchronized(mLock)
         {
             arrays.add(index, t)
         }
-        notifyDataSetChanged()
+        notifyItemRangeInserted(index, 1)
     }
 
     /**
