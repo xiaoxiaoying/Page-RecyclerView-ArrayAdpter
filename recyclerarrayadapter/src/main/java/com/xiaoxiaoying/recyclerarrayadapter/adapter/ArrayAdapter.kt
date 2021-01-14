@@ -20,7 +20,7 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
     private val context: Context,
     @LayoutRes private val resource: Int = 0,
     private val arrays: MutableList<T>
-) : RecyclerView.Adapter<ArrayAdapter.ViewHolder<T>>() {
+) : RecyclerView.Adapter<H>() {
     constructor(context: Context) : this(context, 0)
     constructor(context: Context, resource: Int) : this(context, resource, ArrayList<T>())
 
@@ -151,7 +151,7 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
     /**
      * 获取视图
      */
-    open fun getView(parent: ViewGroup, position: Int, viewType: Int): View {
+    open fun getView(parent: ViewGroup, viewType: Int): View {
         val resourceId = getItemResourceId(viewType)
         if (resourceId == 0 && resource == 0)
             throw NullPointerException("resource id is null")
@@ -167,35 +167,37 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
 
     open fun getCount(): Int = 0
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder<T> {
-        return getViewHolder(getView(p0, p1, getItemViewType(p1)), p0, p1)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): H {
+        return getViewHolder(getView(parent, viewType), parent, viewType)
     }
 
     override fun onBindViewHolder(
-        holder: ViewHolder<T>,
+        holder: H,
         position: Int,
         payloads: MutableList<Any>
     ) {
-        holder.onBind(position, getItemViewType(position), getItem(position), payloads)
+        val itemType = getItemViewType(position)
+        val item = getItem(position)
         holder.onItemClickListener = onItemClickListener
         holder.onItemLongClickListener = onItemLongClickListener
+        holder.itemView.setTag(R.id.itemClickTag, item)
+        onBindView(holder, position, itemType, item, payloads)
     }
 
 
-    override fun onBindViewHolder(holder: ViewHolder<T>, p1: Int) {
-        val itemType = getItemViewType(p1)
-        val item = getItem(p1) ?: return
-        onBindView(holder, p1, itemType, item)
+    override fun onBindViewHolder(holder: H, position: Int) {
     }
 
 
-    open fun getViewHolder(itemView: View, parent: ViewGroup, viewType: Int): ViewHolder<T> {
-        return ViewHolder(itemView)
-    }
+    abstract fun getViewHolder(itemView: View, parent: ViewGroup, viewType: Int): H
 
-    @Deprecated("使用 ViewHolder 中的 onBind")
-    open fun onBindView(h: ViewHolder<T>, position: Int, viewType: Int, t: T?) {
-    }
+    protected abstract fun onBindView(
+        holder: H,
+        position: Int,
+        viewType: Int,
+        t: T?,
+        payloads: MutableList<Any>
+    )
 
     /**
      * 根据viewType 获取 View 的资源ID
@@ -218,9 +220,6 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
             }
         }
 
-        open fun onBind(position: Int, viewType: Int, t: T?, payloads: MutableList<Any>) {
-            itemView.setTag(R.id.itemClickTag, t)
 
-        }
     }
 }

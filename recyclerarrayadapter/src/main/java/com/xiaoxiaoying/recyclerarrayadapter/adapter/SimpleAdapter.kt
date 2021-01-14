@@ -19,7 +19,7 @@ abstract class SimpleAdapter<T>(
         itemView: View,
         parent: ViewGroup,
         viewType: Int
-    ): ArrayAdapter.ViewHolder<T> {
+    ): ViewHolder<T> {
         return getSimpleViewHolder(itemView, parent, viewType)
     }
 

@@ -16,22 +16,19 @@ class MainAdapter(context: Context, private val isPager: Boolean) :
 
     constructor(context: Context) : this(context, false)
 
-    override fun getSimpleViewHolder(
-        itemView: View,
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder<String> {
-        return Holder(itemView)
-    }
+    override fun onBindView(
+        holder: ViewHolder<String>,
+        position: Int,
+        viewType: Int,
+        t: String?,
+        payloads: MutableList<Any>
+    ) {
+        holder.itemView.apply {
 
-    private class Holder(itemView: View) : SimpleAdapter.ViewHolder<String>(itemView) {
-        override fun onBind(position: Int, viewType: Int, t: String?, payloads: MutableList<Any>) {
-            super.onBind(position, viewType, t, payloads)
-            itemView.apply {
+            txt.text = t
 
-                txt.text = t
-
-            }
         }
     }
+
+
 }

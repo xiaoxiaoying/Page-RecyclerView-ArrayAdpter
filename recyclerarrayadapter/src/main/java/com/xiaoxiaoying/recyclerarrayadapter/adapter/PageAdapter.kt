@@ -36,18 +36,25 @@ abstract class PageAdapter<T>(
      * 添加headView
      */
     fun addHeadView(view: View) {
+        if (mHeadView == view)
+            return
+
         hasHeaderView = true
         mHeadView = view
-        notifyDataSetChanged()
+        notifyItemRangeInserted(0, 1)
     }
 
     /**
      * 移除头部view
      */
     fun removeHeadView() {
+
+        if (!hasHeaderView || mHeadView == null)
+            return
+
         hasHeaderView = false
         mHeadView = null
-        notifyDataSetChanged()
+        notifyItemRemoved(0)
     }
 
     /**
@@ -55,14 +62,19 @@ abstract class PageAdapter<T>(
      * @see [SimpleFooter]
      */
     fun setFooterView(footer: LoadingFooter) {
+        if (mFooterView == footer)
+            return
+
         this.mFooterView = footer
-        notifyDataSetChanged()
+        notifyItemRangeChanged(itemCount - 1, itemCount)
     }
 
     /**
      * 不显示尾部 默认是显示的
      */
     fun removeFootView() {
+        if (!hasFooterView)
+            return
         hasFooterView = false
         notifyItemRemoved(itemCount - 1)
     }
