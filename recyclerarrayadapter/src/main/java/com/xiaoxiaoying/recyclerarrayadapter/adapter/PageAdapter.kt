@@ -4,12 +4,10 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.xiaoxiaoying.recyclerarrayadapter.listener.OnLoadNextListener
 import com.xiaoxiaoying.recyclerarrayadapter.widget.LoadingFooter
 import com.xiaoxiaoying.recyclerarrayadapter.widget.SimpleFooter
-import java.lang.NullPointerException
 
 /**
  * create by xiaoxiaoying on 2019-07-01
@@ -18,7 +16,7 @@ import java.lang.NullPointerException
 abstract class PageAdapter<T>(
     context: Context,
     @LayoutRes private val resource: Int = 0
-) : ArrayAdapter<T, PageAdapter.ViewHolder>(context) {
+) : ArrayAdapter<T, ArrayAdapter.ViewHolder<T>>(context) {
 
     companion object {
         private const val TYPE_HEADER = 1//头部--支持头部增加一个headerView
@@ -33,6 +31,7 @@ abstract class PageAdapter<T>(
     private var mHeadView: View? = null
     var onLoadNextListener: OnLoadNextListener? = null
     private var mFooterView: LoadingFooter = SimpleFooter(context)
+
     /**
      * 添加headView
      */
@@ -84,19 +83,23 @@ abstract class PageAdapter<T>(
 
     }
 
-    override fun getViewHolder(itemView: View?, parent: ViewGroup?, viewType: Int): ViewHolder {
+
+    override fun getViewHolder(
+        itemView: View,
+        parent: ViewGroup,
+        viewType: Int
+    ): ArrayAdapter.ViewHolder<T> {
         return when (viewType) {
 
-            TYPE_HEADER -> HeadView(
-                mHeadView!!
-            )
+            TYPE_HEADER -> HeadView(mHeadView!!)
 
             TYPE_FOOTER -> {
-                val footerView = FooterView(
-                    mFooterView.getFooterView()
-                )
+                val footerView = FooterView<T>(mFooterView.getFooterView())
                 footerView.itemView.layoutParams =
-                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                    ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
                 footerView.itemView.setOnClickListener {
                     if (mFooterView.getState() == LoadingFooter.State.Error)
                         onLoadNextListener?.onLoadNext()
@@ -106,15 +109,15 @@ abstract class PageAdapter<T>(
                 footerView
             }
 
-            else -> {
-                if (itemView == null) {
-                    throw NullPointerException("view is null")
-                }
-
-                ViewHolder(itemView)
-            }
+            else -> getPagerViewHolder(itemView, parent, viewType)
         }
     }
+
+    open fun getPagerViewHolder(
+        itemView: View,
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder<T> = ViewHolder(itemView)
 
 
     /**
@@ -126,7 +129,6 @@ abstract class PageAdapter<T>(
      *  [TYPE_FOOTER]; [TYPE_HEADER] ;
      *  [ArrayAdapter.TYPE_NORMAL]; 重复
      */
-
     override fun getItemViewType(position: Int): Int {
         val headerPosition = 0
         val footerPosition = itemCount - 1
@@ -151,10 +153,11 @@ abstract class PageAdapter<T>(
     open fun getItemType(position: Int): Int =
         TYPE_NORMAL
 
-    open class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    open class ViewHolder<T>(itemView: View) : ArrayAdapter.ViewHolder<T>(itemView)
 
-    class HeadView(itemView: View) : ViewHolder(itemView)
-    class FooterView(itemView: View) : ViewHolder(itemView)
+    class HeadView<T>(itemView: View) : ArrayAdapter.ViewHolder<T>(itemView)
+
+    class FooterView<T>(itemView: View) : ArrayAdapter.ViewHolder<T>(itemView)
 
     private fun setLayoutParams(view: View) {
         if (mLayoutManagerType == TYPE_LAYOUT_MANAGER_STAGGER) {
@@ -166,7 +169,10 @@ abstract class PageAdapter<T>(
             view.layoutParams = layoutParams
         } else {
             view.layoutParams =
-                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
         }
     }
 

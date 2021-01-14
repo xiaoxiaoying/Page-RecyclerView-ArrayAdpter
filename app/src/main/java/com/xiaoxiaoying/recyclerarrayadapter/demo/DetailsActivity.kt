@@ -1,4 +1,4 @@
-package com.xiaoxiaoying.recyclerarrayadapter
+package com.xiaoxiaoying.recyclerarrayadapter.demo
 
 import android.graphics.Rect
 import android.os.Bundle
@@ -8,11 +8,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xiaoxiaoying.recyclerarrayadapter.adapter.ArrayAdapter
-import com.xiaoxiaoying.recyclerarrayadapter.adapter.DetailsAdapter
-import com.xiaoxiaoying.recyclerarrayadapter.adapter.MainAdapter
+import com.xiaoxiaoying.recyclerarrayadapter.demo.adapter.DetailsAdapter
+import com.xiaoxiaoying.recyclerarrayadapter.demo.adapter.MainAdapter
 import com.xiaoxiaoying.recyclerarrayadapter.listener.OnLoadNextListener
 import com.xiaoxiaoying.recyclerarrayadapter.manager.ViewPagerLayoutManager
 import com.xiaoxiaoying.recyclerarrayadapter.widget.LoadingFooter
@@ -50,7 +49,9 @@ class DetailsActivity : AppCompatActivity(), OnLoadNextListener {
                 adapter = DetailsAdapter(this)
                 val text = TextView(this)
                 text.layoutParams =
-                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, SizeUtils.dip2px(this, 80F))
+                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        SizeUtils.dip2px(this, 80F)
+                    )
                 text.gravity = Gravity.CENTER
                 text.text = "THIS IS HEAD VIEW"
                 (adapter as DetailsAdapter).addHeadView(text)

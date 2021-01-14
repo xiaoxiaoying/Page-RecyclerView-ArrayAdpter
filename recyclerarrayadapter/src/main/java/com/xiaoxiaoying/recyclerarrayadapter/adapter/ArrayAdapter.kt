@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.xiaoxiaoying.recyclerarrayadapter.R
 import com.xiaoxiaoying.recyclerarrayadapter.listener.OnItemClickListener
@@ -15,11 +16,11 @@ import java.util.*
  * create by xiaoxiaoying on 2019-06-21
  * @author xiaoxiaoying
  */
-abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
+abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
     private val context: Context,
     @LayoutRes private val resource: Int = 0,
     private val arrays: MutableList<T>
-) : RecyclerView.Adapter<H>() {
+) : RecyclerView.Adapter<ArrayAdapter.ViewHolder<T>>() {
     constructor(context: Context) : this(context, 0)
     constructor(context: Context, resource: Int) : this(context, resource, ArrayList<T>())
 
@@ -31,14 +32,9 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
     }
 
-    private var inflater: LayoutInflater? = null
+    private var inflater = LayoutInflater.from(context)
     var onItemClickListener: OnItemClickListener<T>? = null
     var onItemLongClickListener: OnItemLongClickListener<T>? = null
-
-
-    init {
-        inflater = LayoutInflater.from(context)
-    }
 
     fun add(t: T) {
         synchronized(mLock) {
@@ -50,23 +46,21 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
 
     fun addAll(collection: Collection<T>) {
-        val oldItemCount = if (itemCount == 0)
-            1 else itemCount
+        val oldItemCount = itemCount
         synchronized(mLock) {
             arrays.addAll(collection)
         }
 
-        notifyItemRangeChanged(oldItemCount - 1, collection.size)
+        notifyItemRangeChanged(oldItemCount, collection.size)
     }
 
     fun addAll(vararg objects: T) {
-        val oldItemCount = if (itemCount == 0)
-            1 else itemCount
+        val oldItemCount = itemCount
         synchronized(mLock) {
 
             Collections.addAll(arrays, *objects)
         }
-        notifyItemRangeChanged(oldItemCount - 1, objects.size)
+        notifyItemRangeChanged(oldItemCount, objects.size)
     }
 
 
@@ -86,13 +80,14 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
      * @param t The object to remove.
      */
     fun remove(t: T) {
+        val position = arrays.indexOf(t)
         synchronized(mLock)
         {
             if (arrays.contains(t))
                 arrays.remove(t)
         }
-
-        notifyDataSetChanged()
+        if (position > -1)
+            notifyItemRemoved(position)
     }
 
     /**
@@ -133,6 +128,11 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
     fun getData(): MutableList<T> = arrays
 
+    /**
+     * 找到相对应的下标
+     */
+    fun findItemPosition(item: T): Int = arrays.indexOf(item)
+
     fun clean() {
         synchronized(mLock)
         {
@@ -145,11 +145,19 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
     fun getContext(): Context = context
 
+
+    fun getString(@StringRes res: Int): String = context.resources.getString(res)
+
     /**
      * 获取视图
      */
-    fun getView(@LayoutRes mResource: Int, parent: ViewGroup): View =
-        inflater!!.inflate(mResource, parent, false)
+    open fun getView(parent: ViewGroup, position: Int, viewType: Int): View {
+        val resourceId = getItemResourceId(viewType)
+        if (resourceId == 0 && resource == 0)
+            throw NullPointerException("resource id is null")
+        return inflater.inflate(if (resourceId != 0) resourceId else resource, parent, false)
+    }
+
 
     open fun getItem(position: Int): T? = if (position >= arrays.size) null else arrays[position]
 
@@ -159,41 +167,60 @@ abstract class ArrayAdapter<T, H : RecyclerView.ViewHolder>(
 
     open fun getCount(): Int = 0
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): H {
-        return getViewHolder(
-            if (resource == 0)
-                if (getItemResourceId(p1) == 0) null else getView(getItemResourceId(p1), p0)
-            else getView(resource, p0), p0, p1
-        )
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder<T> {
+        return getViewHolder(getView(p0, p1, getItemViewType(p1)), p0, p1)
     }
 
-    override fun onBindViewHolder(holder: H, p1: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder<T>,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        holder.onBind(position, getItemViewType(position), getItem(position), payloads)
+        holder.onItemClickListener = onItemClickListener
+        holder.onItemLongClickListener = onItemLongClickListener
+    }
+
+
+    override fun onBindViewHolder(holder: ViewHolder<T>, p1: Int) {
         val itemType = getItemViewType(p1)
         val item = getItem(p1) ?: return
-
-        holder.itemView.setTag(R.id.itemClickTag, item)
-
-        holder.itemView.setOnClickListener {
-            val tag = it.getTag(R.id.itemClickTag) ?: return@setOnClickListener
-            val itemT = tag as T
-            onItemClickListener?.onItemClick(itemT, it)
-        }
-
-        holder.itemView.setOnLongClickListener {
-            val tag = it.getTag(R.id.itemClickTag) ?: return@setOnLongClickListener false
-            val itemLong = tag as T
-            onItemLongClickListener?.onItemLongClick(itemLong, it)
-            true
-        }
-
         onBindView(holder, p1, itemType, item)
     }
 
 
-    abstract fun getViewHolder(itemView: View?, parent: ViewGroup?, viewType: Int): H
+    open fun getViewHolder(itemView: View, parent: ViewGroup, viewType: Int): ViewHolder<T> {
+        return ViewHolder(itemView)
+    }
 
-    abstract fun onBindView(h: H, position: Int, viewType: Int, t: T?)
+    @Deprecated("使用 ViewHolder 中的 onBind")
+    open fun onBindView(h: ViewHolder<T>, position: Int, viewType: Int, t: T?) {
+    }
 
-    open fun getItemResourceId(position: Int) = 0
+    /**
+     * 根据viewType 获取 View 的资源ID
+     * @param viewType
+     */
+    open fun getItemResourceId(viewType: Int) = 0
 
+    open class ViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var onItemClickListener: OnItemClickListener<T>? = null
+        var onItemLongClickListener: OnItemLongClickListener<T>? = null
+
+        init {
+            itemView.setOnClickListener {
+                onItemClickListener?.onItemClick(it.getTag(R.id.itemClickTag) as T?, it)
+            }
+
+            itemView.setOnLongClickListener {
+                onItemLongClickListener?.onItemLongClick(it.getTag(R.id.itemClickTag) as T?, it)
+                true
+            }
+        }
+
+        open fun onBind(position: Int, viewType: Int, t: T?, payloads: MutableList<Any>) {
+            itemView.setTag(R.id.itemClickTag, t)
+
+        }
+    }
 }

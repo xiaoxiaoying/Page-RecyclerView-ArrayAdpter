@@ -4,9 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.recyclerview.widget.RecyclerView
 import com.xiaoxiaoying.recyclerarrayadapter.adapter.SimpleAdapter.*
-import java.lang.NullPointerException
 
 /**
  * create by xiaoxiaoying on 2019-07-01
@@ -15,12 +13,22 @@ import java.lang.NullPointerException
 abstract class SimpleAdapter<T>(
     context: Context,
     @LayoutRes resource: Int = 0
-) : ArrayAdapter<T, ViewHolder>(context, resource) {
+) : ArrayAdapter<T, ViewHolder<T>>(context, resource) {
 
-    override fun getViewHolder(itemView: View?, parent: ViewGroup?, viewType: Int): ViewHolder {
-        if (itemView == null) throw NullPointerException("resource not font")
-        return ViewHolder(itemView)
+    override fun getViewHolder(
+        itemView: View,
+        parent: ViewGroup,
+        viewType: Int
+    ): ArrayAdapter.ViewHolder<T> {
+        return getSimpleViewHolder(itemView, parent, viewType)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    open fun getSimpleViewHolder(
+        itemView: View,
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder<T> =
+        ViewHolder(itemView)
+
+    open class ViewHolder<T>(itemView: View) : ArrayAdapter.ViewHolder<T>(itemView)
 }

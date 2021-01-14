@@ -1,4 +1,4 @@
-package com.xiaoxiaoying.recyclerarrayadapter
+package com.xiaoxiaoying.recyclerarrayadapter.demo
 
 import android.content.Context
 import android.util.DisplayMetrics
