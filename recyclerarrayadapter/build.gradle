@@ -1,10 +1,12 @@
+group='com.github.xiaoxiaoying'
 apply plugin: 'com.android.library'
 
 //apply plugin: 'com.novoda.bintray-release'
 
-apply plugin: 'com.github.panpf.bintray-publish'
+//apply plugin: 'com.github.panpf.bintray-publish'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.dcendents.android-maven'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
@@ -12,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 30
-        versionCode 12
-        versionName "1.3.2"
+        versionCode 14
+        versionName "1.3.4"
 
     }
     compileOptions {
@@ -23,6 +25,11 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    lintOptions {
+        abortOnError false
+    }
+
 
     buildTypes {
         release {
@@ -35,26 +42,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.5.0'
+    implementation 'androidx.appcompat:appcompat:1.3.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
 
 
     testImplementation 'junit:junit:4.12'
 }
 
-
-publish {
-    def groupProjectID = 'com.xiaoxiaoying91'
-    def artifactProjectID = 'recyclerarrayadapter'
-    def publishVersionID = '1.3.2'
-
-    userOrg = 'xiaoxiaoying91'
-    repoName = 'RecyclerArrayAdapter'
-    groupId = groupProjectID
-    artifactId = artifactProjectID
-    publishVersion = publishVersionID
-    desc = 'PageRecyclerView and RecyclerArrayAdapter'
-    website = 'https://github.com/xiaoxiaoying/Page-RecyclerView-ArrayAdpter'
-}

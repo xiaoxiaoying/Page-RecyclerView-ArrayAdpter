@@ -40,7 +40,9 @@ class PageRecyclerView(context: Context, attrs: AttributeSet?, defStyle: Int = 0
 
                 val itemCount = adapter!!.itemCount
                 val lastPosition = getLastVisiblePosition()
-                if (itemCount == lastPosition + 1 && dy != 0) {
+                val hasScrolled = if (isVertical())
+                    dy != 0 else dx != 0
+                if (itemCount == lastPosition + 1 && hasScrolled) {
                     footer.setState(LoadingFooter.State.Loading)
                     (adapter as PageAdapter<*>).onLoadNextListener?.onLoadNext()
                 }
@@ -48,6 +50,15 @@ class PageRecyclerView(context: Context, attrs: AttributeSet?, defStyle: Int = 0
 
             }
         })
+    }
+
+    private fun isVertical(): Boolean {
+        return when (val manager = layoutManager) {
+            is LinearLayoutManager -> manager.orientation
+            is GridLayoutManager -> manager.orientation
+            is StaggeredGridLayoutManager -> manager.orientation
+            else -> 1
+        } == 1
     }
 
     /**
@@ -61,7 +72,8 @@ class PageRecyclerView(context: Context, attrs: AttributeSet?, defStyle: Int = 0
             is GridLayoutManager -> (layoutManager as GridLayoutManager).findLastVisibleItemPosition()
             is StaggeredGridLayoutManager -> {
                 val layoutManager = layoutManager as StaggeredGridLayoutManager?
-                val lastPositions = layoutManager!!.findLastVisibleItemPositions(IntArray(layoutManager.spanCount))
+                val lastPositions =
+                    layoutManager!!.findLastVisibleItemPositions(IntArray(layoutManager.spanCount))
                 getMaxPosition(lastPositions)
             }
             else -> layoutManager!!.itemCount - 1

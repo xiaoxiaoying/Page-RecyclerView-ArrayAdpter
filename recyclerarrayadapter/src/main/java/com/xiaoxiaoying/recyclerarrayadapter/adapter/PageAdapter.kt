@@ -16,11 +16,12 @@ import com.xiaoxiaoying.recyclerarrayadapter.widget.SimpleFooter
 abstract class PageAdapter<T>(
     context: Context,
     @LayoutRes private val resource: Int = 0
-) : ArrayAdapter<T, ArrayAdapter.ViewHolder<T>>(context) {
+) : ArrayAdapter<T, ArrayAdapter.ViewHolder<T>>(context, resource) {
 
     companion object {
-        private const val TYPE_HEADER = 1//头部--支持头部增加一个headerView
-        private const val TYPE_FOOTER = 2//底部--往往是loading_more
+
+        const val TYPE_HEADER = Int.MIN_VALUE//头部--支持头部增加一个headerView
+        const val TYPE_FOOTER = Int.MIN_VALUE + 1//底部--往往是loading_more
         private const val TYPE_LAYOUT_MANAGER_STAGGER = 4//代码item展示模式是网格模式
         private const val TYPE_LAYOUT_MANAGER_NORMAL = 3
     }
@@ -30,7 +31,21 @@ abstract class PageAdapter<T>(
     private var mLayoutManagerType = TYPE_LAYOUT_MANAGER_NORMAL
     private var mHeadView: View? = null
     var onLoadNextListener: OnLoadNextListener? = null
-    private var mFooterView: LoadingFooter = SimpleFooter(context)
+    var mFooterView: LoadingFooter = SimpleFooter(context)
+        set(value) {
+            if (field == value)
+                return
+            field = value
+            notifyItemRangeChanged(itemCount - 1, itemCount)
+        }
+
+    override fun getView(parent: ViewGroup, viewType: Int): View {
+        return when (viewType) {
+            TYPE_HEADER -> mHeadView!!
+            TYPE_FOOTER -> mFooterView.getFooterView()
+            else -> super.getView(parent, viewType)
+        }
+    }
 
     /**
      * 添加headView
