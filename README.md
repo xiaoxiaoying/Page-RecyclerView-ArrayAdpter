@@ -1,8 +1,8 @@
 # RecyclerArrayAdapter
 
 ###### `Java 8.0`
-###### `Kotlin 1.3.50`
-###### `SDk 29`
+###### `Kotlin 1.5.21`
+###### `SDk 30`
 ###### `Androidx`
 
 * 方便快捷的 `ArrayAdapter`
@@ -37,5 +37,5 @@
 #### 使用
 
 ```
-implementation 'com.xiaoxiaoying91:recyclerarrayadapter:1.2.6'
+implementation 'com.github.bumptech.glide:okhttp3-integration:4.12.0'
 ```
