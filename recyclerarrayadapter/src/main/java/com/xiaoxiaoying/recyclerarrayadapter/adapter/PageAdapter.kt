@@ -102,8 +102,13 @@ abstract class PageAdapter<T>(
 
     fun getLoadingFooter(): LoadingFooter = mFooterView
     override fun getItem(position: Int): T? {
-        return when (getItemViewType(position)) {
-            TYPE_HEADER, TYPE_FOOTER -> null
+
+        val headerPosition = 0
+        val footerPosition = itemCount - 1
+        return when {
+            position == headerPosition && hasHeaderView -> null
+
+            position == footerPosition && hasFooterView -> null
 
             else -> super.getItem(if (hasHeaderView) position - 1 else position)
         }

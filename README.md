@@ -37,5 +37,5 @@
 #### 使用
 
 ```
-implementation 'com.github.bumptech.glide:okhttp3-integration:4.12.0'
+implementation 'com.github.xiaoxiaoying:Page-RecyclerView-ArrayAdpter:1.3.5'
 ```
