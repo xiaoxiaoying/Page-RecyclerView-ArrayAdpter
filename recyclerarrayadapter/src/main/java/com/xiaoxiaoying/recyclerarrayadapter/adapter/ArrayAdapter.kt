@@ -18,7 +18,7 @@ import java.util.*
  */
 abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
     private val context: Context,
-    @LayoutRes private val resource: Int = 0,
+    @LayoutRes private val resId: Int = 0,
     private val arrays: MutableList<T>
 ) : RecyclerView.Adapter<H>() {
     constructor(context: Context) : this(context, 0)
@@ -136,10 +136,10 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
     fun clean() {
         synchronized(mLock)
         {
+            val size = itemCount
             arrays.clear()
+            notifyItemRangeRemoved(0, size)
         }
-
-        notifyDataSetChanged()
     }
 
 
@@ -153,9 +153,9 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
      */
     open fun getView(parent: ViewGroup, viewType: Int): View {
         val resourceId = getItemResourceId(viewType)
-        if (resourceId == 0 && resource == 0)
+        if (resourceId == 0 && resId == 0)
             throw NullPointerException("resource id is null")
-        return inflater.inflate(if (resourceId != 0) resourceId else resource, parent, false)
+        return inflater.inflate(if (resourceId != 0) resourceId else resId, parent, false)
     }
 
 
@@ -215,8 +215,12 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
             }
 
             itemView.setOnLongClickListener {
-                onItemLongClickListener?.onItemLongClick(it.getTag(R.id.itemClickTag) as T?, it)
-                true
+                if (onItemLongClickListener == null) {
+                    false
+                } else {
+                    onItemLongClickListener?.onItemLongClick(it.getTag(R.id.itemClickTag) as T?, it)
+                    true
+                }
             }
         }
 
