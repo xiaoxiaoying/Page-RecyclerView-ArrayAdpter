@@ -139,7 +139,7 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
     fun clean() {
         synchronized(mLock)
         {
-            val size = itemCount
+            val size = itemCount - getCount()
             arrays.clear()
             notifyItemRangeRemoved(0, size)
         }
