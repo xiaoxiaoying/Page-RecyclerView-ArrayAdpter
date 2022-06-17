@@ -46,24 +46,20 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
 
 
     fun addAll(collection: Collection<T>) {
-
+        val oldItemCount = itemCount - getCount()
         synchronized(mLock) {
-            val oldItemCount = itemCount - getCount()
             arrays.addAll(collection)
-            notifyItemRangeChanged(oldItemCount, collection.size + getCount())
         }
-
+        notifyItemRangeChanged(oldItemCount, collection.size + getCount())
 
     }
 
     fun addAll(vararg objects: T) {
-
+        val oldItemCount = itemCount - getCount()
         synchronized(mLock) {
-            val oldItemCount = itemCount - getCount()
             Collections.addAll(arrays, *objects)
-            notifyItemRangeChanged(oldItemCount, objects.size + getCount())
         }
-
+        notifyItemRangeChanged(oldItemCount, objects.size + getCount())
     }
 
 
