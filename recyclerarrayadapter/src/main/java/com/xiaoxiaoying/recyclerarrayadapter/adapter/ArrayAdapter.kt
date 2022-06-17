@@ -139,9 +139,10 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
     fun clean() {
         synchronized(mLock)
         {
-            val size = itemCount - getCount()
+            val item = itemCount
             arrays.clear()
-            notifyItemRangeRemoved(0, size)
+            notifyItemRangeChanged(0, item)
+
         }
     }
 
