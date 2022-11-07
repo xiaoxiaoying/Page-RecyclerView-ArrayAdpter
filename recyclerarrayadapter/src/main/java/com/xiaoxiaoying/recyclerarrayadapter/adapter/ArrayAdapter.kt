@@ -16,14 +16,11 @@ import java.util.*
  * create by xiaoxiaoying on 2019-06-21
  * @author xiaoxiaoying
  */
-abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
+abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>> @JvmOverloads constructor(
     private val context: Context,
     @LayoutRes private val resId: Int = 0,
-    private val arrays: MutableList<T>
+    private val arrays: MutableList<T> = mutableListOf()
 ) : RecyclerView.Adapter<H>() {
-    constructor(context: Context) : this(context, 0)
-    constructor(context: Context, resource: Int) : this(context, resource, ArrayList<T>())
-
 
     companion object {
         private val mLock = Any()
@@ -73,6 +70,26 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
         notifyItemRangeInserted(index, 1)
     }
 
+    fun insert(vararg objects: T, startIndex: Int) {
+        if (startIndex > arrays.size) return
+        synchronized(mLock)
+        {
+            objects.forEachIndexed { index, t ->
+                insert(t, index + startIndex)
+            }
+        }
+    }
+
+    fun insert(collection: Collection<T>, startIndex: Int) {
+        if (startIndex > arrays.size) return
+        synchronized(mLock)
+        {
+            collection.forEachIndexed { index, t ->
+                insert(t, index + startIndex)
+            }
+        }
+    }
+
     /**
      * Removes the specified object from the array.
      *
@@ -114,12 +131,14 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
     fun removeItem(count: Int, startPosition: Int) {
         synchronized(mLock)
         {
-            for (position in 0 until count) {
-                val deletePosition = position + startPosition
-                if (arrays.size <= deletePosition) return
-                arrays.removeAt(deletePosition)
+            repeat(count) {
+                val deletePosition = it - 1 + startPosition
+                if (arrays.size > deletePosition) {
+                    arrays.removeAt(deletePosition)
+                }
 
             }
+
             notifyItemRangeRemoved(startPosition, count)
         }
     }
@@ -131,6 +150,10 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>>(
      * 找到相对应的下标
      */
     fun findItemPosition(item: T): Int = arrays.indexOf(item)
+
+    fun find(predicate: (T) -> Boolean) {
+        arrays.find(predicate)
+    }
 
     fun clean() {
         synchronized(mLock)

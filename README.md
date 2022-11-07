@@ -1,8 +1,8 @@
 # RecyclerArrayAdapter
 
 ###### `Java 8.0`
-###### `Kotlin 1.7.0`
-###### `SDk 31`
+###### `Kotlin 1.7.10`
+###### `SDk 33`
 ###### `Androidx`
 
 * 方便快捷的 `ArrayAdapter`
@@ -37,5 +37,5 @@
 #### 使用
 
 ```
-implementation 'com.github.xiaoxiaoying:Page-RecyclerView-ArrayAdpter:1.4.1'
+implementation 'com.github.xiaoxiaoying:Page-RecyclerView-ArrayAdpter:1.4.2'
 ```
