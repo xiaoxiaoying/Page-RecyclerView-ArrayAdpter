@@ -151,9 +151,18 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>> @JvmOverloads con
      */
     fun findItemPosition(item: T): Int = arrays.indexOf(item)
 
-    fun find(predicate: (T) -> Boolean) {
-        arrays.find(predicate)
-    }
+    fun find(predicate: (T) -> Boolean): T? = arrays.find(predicate)
+
+    fun any(): Boolean = arrays.any()
+
+    fun any(predicate: (T) -> Boolean): Boolean = arrays.any(predicate)
+
+    fun count(): Int = arrays.size
+
+    fun count(predicate: (T) -> Boolean): Int = arrays.count(predicate)
+
+    fun filter(predicate: (T) -> Boolean): List<T> = arrays.filter(predicate)
+
 
     fun clean() {
         synchronized(mLock)
