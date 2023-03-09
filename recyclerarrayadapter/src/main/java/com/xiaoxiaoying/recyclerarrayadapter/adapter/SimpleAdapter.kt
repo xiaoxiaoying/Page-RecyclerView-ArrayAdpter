@@ -44,7 +44,7 @@ abstract class SimpleAdapter<T>(
     ): ViewHolder<T> =
         ViewHolder(itemView)
 
-    open class ViewHolder<T>(private val itemView: View) : ArrayAdapter.ViewHolder<T>(itemView) {
+    open class ViewHolder<T>(itemView: View) : ArrayAdapter.ViewHolder<T>(itemView) {
         open fun onBindViewHolder(
             position: Int,
             payloads: MutableList<Any>
