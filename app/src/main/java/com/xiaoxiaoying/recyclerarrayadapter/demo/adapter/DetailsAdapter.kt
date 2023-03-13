@@ -4,7 +4,7 @@ import android.content.Context
 import com.xiaoxiaoying.recyclerarrayadapter.adapter.ArrayAdapter
 import com.xiaoxiaoying.recyclerarrayadapter.adapter.PageAdapter
 import com.xiaoxiaoying.recyclerarrayadapter.demo.R
-import kotlinx.android.synthetic.main.item_main.view.*
+import com.xiaoxiaoying.recyclerarrayadapter.demo.databinding.ItemMainBinding
 
 /**
  * create by xiaoxiaoying on 2019-07-04
@@ -26,7 +26,8 @@ class DetailsAdapter(context: Context) : PageAdapter<String>(context) {
             return
 
         holder.itemView.apply {
-            txt.text = t
+            val bind = ItemMainBinding.bind(this)
+            bind.txt.text = t
         }
     }
 }
