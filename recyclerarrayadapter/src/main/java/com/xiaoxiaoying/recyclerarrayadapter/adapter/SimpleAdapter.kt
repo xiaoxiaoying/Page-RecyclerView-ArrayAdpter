@@ -23,13 +23,14 @@ abstract class SimpleAdapter<T>(
         return getSimpleViewHolder(itemView, parent, viewType)
     }
 
-    override fun onBindViewHolder(
+    override fun onBindView(
         holder: ViewHolder<T>,
         position: Int,
+        viewType: Int,
+        t: T?,
         payloads: MutableList<Any>
     ) {
-        super.onBindViewHolder(holder, position, payloads)
-        holder.onBindViewHolder(position, payloads)
+        holder.onBindViewHolder(position, viewType, t, payloads)
     }
 
     /**
@@ -47,6 +48,8 @@ abstract class SimpleAdapter<T>(
     open class ViewHolder<T>(itemView: View) : ArrayAdapter.ViewHolder<T>(itemView) {
         open fun onBindViewHolder(
             position: Int,
+            viewType: Int,
+            t: T?,
             payloads: MutableList<Any>
         ) {
         }

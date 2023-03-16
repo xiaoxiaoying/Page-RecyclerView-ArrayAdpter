@@ -37,5 +37,5 @@
 #### 使用
 
 ```
-implementation 'com.github.xiaoxiaoying:Page-RecyclerView-ArrayAdpter:1.5.1'
+implementation 'com.github.xiaoxiaoying:Page-RecyclerView-ArrayAdpter:1.5.2'
 ```
