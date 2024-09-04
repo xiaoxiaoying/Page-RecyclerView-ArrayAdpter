@@ -44,7 +44,8 @@ class PageRecyclerView(context: Context, attrs: AttributeSet?, defStyle: Int = 0
                     dy != 0 else dx != 0
                 if (itemCount == lastPosition + 1 && hasScrolled) {
                     footer.setState(LoadingFooter.State.Loading)
-                    (adapter as PageAdapter<*>).onLoadNextListener?.onLoadNext()
+                    (adapter as PageAdapter<*>).onLoadNextCall()
+
                 }
 
 
@@ -54,8 +55,9 @@ class PageRecyclerView(context: Context, attrs: AttributeSet?, defStyle: Int = 0
 
     private fun isVertical(): Boolean {
         return when (val manager = layoutManager) {
-            is LinearLayoutManager -> manager.orientation
             is GridLayoutManager -> manager.orientation
+            is LinearLayoutManager -> manager.orientation
+
             is StaggeredGridLayoutManager -> manager.orientation
             else -> 1
         } == 1
@@ -68,14 +70,16 @@ class PageRecyclerView(context: Context, attrs: AttributeSet?, defStyle: Int = 0
      */
     private fun getLastVisiblePosition(): Int {
         return when (layoutManager) {
-            is LinearLayoutManager -> (layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-            is GridLayoutManager -> (layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+            is GridLayoutManager,
+            is LinearLayoutManager -> (layoutManager as GridLayoutManager).findLastVisibleItemPosition()
+
             is StaggeredGridLayoutManager -> {
                 val layoutManager = layoutManager as StaggeredGridLayoutManager?
                 val lastPositions =
                     layoutManager!!.findLastVisibleItemPositions(IntArray(layoutManager.spanCount))
                 getMaxPosition(lastPositions)
             }
+
             else -> layoutManager!!.itemCount - 1
         }
     }
@@ -183,7 +187,6 @@ class PageRecyclerView(context: Context, attrs: AttributeSet?, defStyle: Int = 0
         indexItemMatch.addAll(arr)
         if (adapter == null)
             return
-
         arr.forEach {
             if (adapter!!.itemCount <= it) return@forEach
             adapter?.notifyItemChanged(if (hasHeader) it + 1 else it)

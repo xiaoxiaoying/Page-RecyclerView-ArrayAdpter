@@ -165,11 +165,12 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>> @JvmOverloads con
 
 
     fun clean() {
+        val size = count()
         synchronized(mLock)
         {
             arrays.clear()
         }
-        notifyDataSetChanged()
+        notifyItemRangeRemoved(0, size)
     }
 
 
@@ -235,22 +236,28 @@ abstract class ArrayAdapter<T, H : ArrayAdapter.ViewHolder<T>> @JvmOverloads con
      */
     open fun getItemResourceId(viewType: Int) = 0
 
-    open class ViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView){
+    open class ViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var onItemClickListener: OnItemClickListener<T>? = null
         var onItemLongClickListener: OnItemLongClickListener<T>? = null
+
         init {
-            itemView.setOnClickListener {
-                onItemClickListener?.onItemClick(it.getTag(R.id.itemClickTag) as T?, it)
+
+            if (onItemClickListener != null) {
+                itemView.setOnClickListener {
+                    @Suppress("UNCHECKED_CAST")
+                    onItemClickListener?.onItemClick(it.getTag(R.id.itemClickTag) as? T, it)
+                }
             }
 
-            itemView.setOnLongClickListener {
-                if (onItemLongClickListener == null) {
-                    false
-                } else {
+            if (onItemLongClickListener != null) {
+                itemView.setOnLongClickListener {
+                    @Suppress("UNCHECKED_CAST")
                     onItemLongClickListener?.onItemLongClick(it.getTag(R.id.itemClickTag) as T?, it)
                     true
                 }
             }
+
+
         }
 
     }

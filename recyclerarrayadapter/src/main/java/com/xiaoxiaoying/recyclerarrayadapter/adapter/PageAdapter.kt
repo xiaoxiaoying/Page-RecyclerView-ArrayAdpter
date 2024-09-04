@@ -30,6 +30,12 @@ abstract class PageAdapter<T>(
     var hasFooterView = true
     private var mLayoutManagerType = TYPE_LAYOUT_MANAGER_NORMAL
     private var mHeadView: View? = null
+
+    var onLoadNextCall: () -> Unit = {
+        onLoadNextListener?.onLoadNext()
+    }
+
+    @Deprecated("使用Kotlin 1.5.4 版本以前可以使用这个方法")
     var onLoadNextListener: OnLoadNextListener? = null
     var mFooterView: LoadingFooter = SimpleFooter(context)
         set(value) {
@@ -133,8 +139,9 @@ abstract class PageAdapter<T>(
                         ViewGroup.LayoutParams.WRAP_CONTENT
                     )
                 footerView.itemView.setOnClickListener {
-                    if (mFooterView.getState() == LoadingFooter.State.Error)
-                        onLoadNextListener?.onLoadNext()
+                    if (mFooterView.getState() == LoadingFooter.State.Error) {
+                        onLoadNextCall()
+                    }
 
                 }
 

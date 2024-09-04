@@ -1,0 +1,27 @@
+[versions]
+agp = "8.5.1"
+kotlin = "1.9.23"
+coreKtx = "1.13.1"
+compileSdk = "34"
+minSdk = "21"
+constraintLayout = "2.1.4"
+recyclerview = "1.3.2"
+recyclerview-selection = "1.1.0"
+appcompat = "1.7.0"
+
+
+[libraries]
+androidxCoreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+recyclerviewSelection = { group = "androidx.recyclerview", name = "recyclerview-selection", version.ref = "recyclerview-selection" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintLayout" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLib = { id = "com.android.library", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+
+[bundles]
+base = ["androidxCoreKtx", "appcompat", "recyclerview", "recyclerviewSelection"]
