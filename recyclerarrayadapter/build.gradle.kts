@@ -9,12 +9,12 @@ android {
     namespace = "com.xiaoxiaoying.recyclerarrayadapter"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
-        defaultConfig {
-            minSdk = libs.versions.minSdk.get().toInt()
+    defaultConfig {
+        minSdk = libs.versions.minSdk.get().toInt()
 //            versionCode = 154
 //            versionName = "1.5.4"
 
-        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_19
         targetCompatibility = JavaVersion.VERSION_19
@@ -34,7 +34,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile ("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -46,14 +49,12 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("maven") {
 //            from(components["kotlin"]) // 根据你项目的实际组件进行替换
             groupId = "com.github.xiaoxiaoying"
             artifactId = "Page-RecyclerView-ArrayAdpter" // 替换为你的 artifact ID
-            version = "1.5.7"
+            version = "1.5.8"
         }
     }
-    repositories {
-        mavenLocal() // 发布到本地 Maven 仓库
-    }
+
 }
