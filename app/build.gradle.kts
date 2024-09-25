@@ -10,8 +10,8 @@ android {
     defaultConfig {
         applicationId = "com.xiaoxiaoying.recyclerarrayadapter.demo"
         minSdk = libs.versions.minSdk.get().toInt()
-        versionCode = 159
-        versionName = "1.5.9"
+        versionCode = 160
+        versionName = "1.6.0"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
