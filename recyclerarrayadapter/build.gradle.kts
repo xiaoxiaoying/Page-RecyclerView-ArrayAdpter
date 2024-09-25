@@ -16,8 +16,8 @@ android {
 
         }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_22
-        targetCompatibility = JavaVersion.VERSION_22
+        sourceCompatibility = JavaVersion.VERSION_19
+        targetCompatibility = JavaVersion.VERSION_19
     }
     kotlinOptions {
         jvmTarget = "19"
@@ -50,7 +50,7 @@ publishing {
 //            from(components["kotlin"]) // 根据你项目的实际组件进行替换
             groupId = "com.github.xiaoxiaoying"
             artifactId = "Page-RecyclerView-ArrayAdpter" // 替换为你的 artifact ID
-            version = "1.5.6"
+            version = "1.5.7"
         }
     }
     repositories {
