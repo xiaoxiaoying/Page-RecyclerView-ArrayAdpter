@@ -22,6 +22,8 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLib = { id = "com.android.library", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
+mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.30.0"}
+
 
 [bundles]
 base = ["androidxCoreKtx", "appcompat", "recyclerview", "recyclerviewSelection"]

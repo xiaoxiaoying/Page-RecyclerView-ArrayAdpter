@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidLib)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("maven-publish")
+    alias(libs.plugins.mavenPublish)
 }
 
 
@@ -30,7 +30,6 @@ android {
     buildFeatures {
         viewBinding = true
     }
-
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -49,11 +48,11 @@ dependencies {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("release") {
 //            from(components["kotlin"]) // 根据你项目的实际组件进行替换
             groupId = "com.github.xiaoxiaoying"
             artifactId = "Page-RecyclerView-ArrayAdpter" // 替换为你的 artifact ID
-            version = "1.6.0"
+            version = "1.6.1"
         }
     }
     repositories {
