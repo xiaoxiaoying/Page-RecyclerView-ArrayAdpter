@@ -40,5 +40,5 @@ adapter.add(List<Any>)
 #### 使用
 
 ```
-implementation 'com.github.xiaoxiaoying:Page-RecyclerView-ArrayAdpter:1.5.9'
+implementation 'com.github.xiaoxiaoying:Page-RecyclerView-ArrayAdpter:1.6.1'
 ```
